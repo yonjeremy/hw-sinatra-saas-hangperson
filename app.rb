@@ -40,10 +40,28 @@ class HangpersonApp < Sinatra::Base
   post '/guess' do
     letter = params[:guess].to_s[0]
     
-    # @game.guess letter
+    @game.guess letter
 
     redirect '/show'
   end
+
+  
+  # # Everytime a guess is made, we should eventually end up at this route.
+  # # Use existing methods in HangpersonGame to check if player has
+  # # won, lost, or neither, and take the appropriate action.
+  # # Notice that the show.erb template expects to use the instance variables
+  # # wrong_guesses and word_with_guesses from @game.
+  # get '/show' do
+  #   if @game.check_win_or_lose == :win
+  #     redirect '/win'
+  #   elsif @game.check_win_or_lose == :lose
+  #     redirect '/lose'
+  #   else 
+  #     redirect '/show'
+  #   end
+  # end
+  
+
   
   # Everytime a guess is made, we should eventually end up at this route.
   # Use existing methods in HangpersonGame to check if player has
@@ -51,12 +69,13 @@ class HangpersonApp < Sinatra::Base
   # Notice that the show.erb template expects to use the instance variables
   # wrong_guesses and word_with_guesses from @game.
   get '/show' do
-    if @game.check_win_or_lose == :win
-      redirect '/win'
-    elsif @game.check_win_or_lose == :lose
-      redirect '/lose'
-    else 
-      redirect '/show'
+    gameStatus = @game.check_win_or_lose
+    if gameStatus == :win
+      erb :win 
+    elsif gameStatus == :lose
+      erb :lose 
+    else
+      erb :show 
     end
   end
   
